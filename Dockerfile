@@ -1,14 +1,13 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0
+# Build using the SDK image
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as build-env
+RUN apt-get update && apt-get install -y npm
+WORKDIR /podgrasp
+COPY . .
+RUN dotnet publish -c Release -o out
 
-# https://docs.microsoft.com/en-us/azure/app-service/containers/configure-custom-container#enable-ssh
-RUN apt-get update -y \
-    && apt-get install -y --no-install-recommends dialog \ 
-    && apt-get install -y --no-install-recommends openssh-server \
-    && mkdir -p /run/sshd \ 
-    && echo "root:Docker!" | chpasswd 
+# Deploy with the runtime image
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+WORKDIR /podgrasp
+COPY --from=build-env /podgrasp/out .
 
-COPY sshd_config /etc/ssh/
-
-EXPOSE 80 2222
-
-ENTRYPOINT ["/bin/bash", "-c", "/usr/sbin/sshd"]
+ENTRYPOINT [ "/podgrasp/Podgrasp.Service" ]
