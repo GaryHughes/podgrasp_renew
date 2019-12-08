@@ -9,6 +9,6 @@ RUN apt update -y \
 
 COPY sshd_config /etc/ssh/
 
-EXPOSE 8000 2222
+EXPOSE 80 2222
 
 ENTRYPOINT ["/bin/bash", "-c", "/usr/sbin/sshd"]
