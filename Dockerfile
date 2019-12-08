@@ -10,4 +10,5 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /podgrasp
 COPY --from=build-env /podgrasp/out .
 
+EXPOSE 80
 ENTRYPOINT [ "/podgrasp/Podgrasp.Service" ]
