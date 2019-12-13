@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -5,6 +6,10 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Podgrasp.Service.Model;
+
 
 namespace Podgrasp.Service
 {
@@ -20,7 +25,6 @@ namespace Podgrasp.Service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
@@ -28,6 +32,14 @@ namespace Podgrasp.Service
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddApiVersioning(options => {
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+            });
+
+            services.AddDbContext<PodgraspContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Postgres")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
