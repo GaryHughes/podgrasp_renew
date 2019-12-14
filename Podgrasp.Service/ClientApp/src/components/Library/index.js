@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import authService from '../api-authorization/AuthorizeService'
 
 export class Library extends Component {
   
@@ -19,12 +20,15 @@ export class Library extends Component {
         this.fetchPodcasts();
     }
 
-    fetchPodcasts() {
+    async fetchPodcasts() {
         console.log("fetching podcasts");
         this.setState({ isLoading: true });
-        fetch('Api/1.0/Podcasts')
-            .then(result => this.setPodcasts(result))
-            .catch(error => this.setState({ error }));
+        const token = await authService.getAccessToken();
+        fetch('Api/1.0/Podcasts', {
+            headers: !token ? {} : { 'Authorization': `Bearer ${token}` } 
+        })
+        .then(result => this.setPodcasts(result))
+        .catch(error => this.setState({ error }));
     }
     
     setPodcasts(result) {

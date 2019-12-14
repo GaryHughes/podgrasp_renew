@@ -21,7 +21,7 @@ namespace Podgrasp.Service
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://+:8080");
+                    webBuilder.UseUrls("https://+:8081;http://+:8080");
                 });
     }
 }

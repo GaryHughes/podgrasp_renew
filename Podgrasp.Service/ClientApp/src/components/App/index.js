@@ -4,6 +4,9 @@ import { Layout } from '../Layout';
 import { Subscribe } from '../Subscribe';
 import { Library } from '../Library';
 import { Playlist } from '../Playlist';
+import AuthorizeRoute from '../api-authorization/AuthorizeRoute';
+import ApiAuthorizationRoutes from '../api-authorization/ApiAuthorizationRoutes';
+import { ApplicationPaths } from '../api-authorization/ApiAuthorizationConstants';
 
 import './index.css'
 
@@ -14,8 +17,9 @@ export default class App extends Component {
     return (
       <Layout>
         <Route exact path='/' component={Subscribe} />
-        <Route path='/playlist' component={Playlist} />
-        <Route path='/library' component={Library} />
+        <AuthorizeRoute path='/playlist' component={Playlist} />
+        <AuthorizeRoute path='/library' component={Library} />
+        <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );
   }

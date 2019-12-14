@@ -1,6 +1,6 @@
 {
-  "short_name": "Podgrasp.Service",
-  "name": "Podgrasp.Service",
+  "short_name": "Podgrasp",
+  "name": "Podgrasp",
   "icons": [
     {
       "src": "favicon.ico",
