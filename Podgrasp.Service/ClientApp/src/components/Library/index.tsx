@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import authService from '../api-authorization/AuthorizeService'
 
+interface Props {}
+
 export class Library extends Component {
   
-    constructor(props) {
+    constructor(props: Props) {
     
         super(props);
         
@@ -31,7 +33,7 @@ export class Library extends Component {
         .catch(error => this.setState({ error }));
     }
     
-    setPodcasts(result) {
+    setPodcasts(result: any) {
         this.setState({
             podcats: result,
             isLoading: false
