@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Podcast, getPodcasts } from '../api-podgrasp';
+import { Podcast, subscribedPodcasts } from '../api-podgrasp';
 
 interface LibraryProps {}
 
@@ -32,7 +32,7 @@ export class Library extends Component<LibraryProps, LibraryState> {
     async fetchPodcasts() {
         try {
             this.setState({ isLoading: true });
-            const podcasts = await getPodcasts();
+            const podcasts = await subscribedPodcasts();
             this.setPodcasts(podcasts);
         }
         catch (error) {

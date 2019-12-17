@@ -23,9 +23,9 @@ export async function subscribeToPodcast(subscription: Subscription) {
     });
 }
 
-export async function getPodcasts() : Promise<Podcast[]> {
+export async function subscribedPodcasts() : Promise<Podcast[]> {
     const token = await authService.getAccessToken();
-    const response = await fetch('Api/1.0/Podcasts', {
+    const response = await fetch('Api/1.0/SubscribedPodcasts', {
         headers: !token ? {} : { 'Authorization': `Bearer ${token}` } 
     });
     const data = await response.json();

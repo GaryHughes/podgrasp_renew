@@ -27,11 +27,11 @@ namespace Podgrasp.Service.Controllers
         }
 
         [HttpGet]
-        public IActionResult Podcasts()
+        public IActionResult SubscribedPodcasts()
         {
             try {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                return new JsonResult(_service.Podcasts(userId));       
+                return new JsonResult(_service.SubscribedPodcasts(userId));       
             }    
             catch (Exception ex) {
                 return BadRequest(ex);

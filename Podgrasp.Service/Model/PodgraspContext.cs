@@ -18,7 +18,21 @@ namespace Podgrasp.Service.Model
         public DbSet<Podcast> Podcasts { get; set; }
         
         public DbSet<Episode> Episodes { get; set; }
-
+       
         public DbSet<PlaylistEpisode> Playlist { get; set; }
+
+        public DbSet<UserPodcast> UserPodcasts { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            
+            modelBuilder.Entity<Podcast>()
+                .HasIndex(p => p.Url);
+
+            modelBuilder.Entity<UserPodcast>()
+                .HasKey(up => new { up.UserId, up.PodcastId });
+        }
     }
 }

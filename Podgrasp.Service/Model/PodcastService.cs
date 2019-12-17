@@ -14,11 +14,23 @@ namespace Podgrasp.Service.Model
             _serviceProvider = serviceProvider;
         }
 
-        public Podcast[] Podcasts(string userId)
+        public Podcast[] Podcasts()
         {
             using var scope = _serviceProvider.GetService<IServiceScopeFactory>().CreateScope();
             using var context = scope.ServiceProvider.GetService<PodgraspContext>();
-            return context.Podcasts.Where(podcast => podcast.UserId == userId).ToArray();
+            return context.Podcasts.ToArray();
+        }
+
+        public Podcast[] SubscribedPodcasts(string userId)
+        {
+            using var scope = _serviceProvider.GetService<IServiceScopeFactory>().CreateScope();
+            using var context = scope.ServiceProvider.GetService<PodgraspContext>();
+            
+            var podcasts = from up in context.UserPodcasts 
+                           where up.UserId == userId
+                           select up.Podcast;
+            
+            return podcasts.ToArray();
         }
 
         public void Subscribe(string userId, Subscription subscription)
@@ -27,15 +39,33 @@ namespace Podgrasp.Service.Model
                 throw new ArgumentException($"Invalid URL '{subscription.Url}'", nameof(subscription.Url));
             }
 
-            var podcast = new Podcast {
-                UserId = userId,
-                Url = validUrl
-            };
-
             using var scope = _serviceProvider.GetService<IServiceScopeFactory>().CreateScope();
             using var context = scope.ServiceProvider.GetService<PodgraspContext>();
-            context.Podcasts.Add(podcast);
+         
+            var podcast = context.Podcasts.FirstOrDefault(podcast => podcast.Url == validUrl);
+
+            if (podcast is null) {
+                podcast = new Podcast {
+                    Url = validUrl
+                };
+                context.Podcasts.Add(podcast);
+            }
+
+            var userPodcast = (from up in context.UserPodcasts
+                               where up.UserId == userId && up.Podcast == podcast
+                               select up).FirstOrDefault();
+
+            if (userPodcast is null) {
+                userPodcast = new UserPodcast {
+                    UserId = userId,
+                    PodcastId = podcast.Id,
+                    Podcast = podcast
+                };
+                context.UserPodcasts.Add(userPodcast);
+            }
+
             context.SaveChanges();
         }
+
     };
 }

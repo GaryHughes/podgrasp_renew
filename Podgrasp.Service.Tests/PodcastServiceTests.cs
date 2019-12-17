@@ -13,7 +13,8 @@ namespace Podgrasp.Service.Tests
         {
             var provider = new TestServiceProvider();
             var service = new PodcastService(provider);
-            Assert.IsFalse(service.Podcasts("bart").Any());
+            Assert.IsFalse(service.SubscribedPodcasts("bart").Any());
+            Assert.IsFalse(service.Podcasts().Any());
         }
 
         [TestMethod]
@@ -22,9 +23,10 @@ namespace Podgrasp.Service.Tests
             var provider = new TestServiceProvider();
             var service = new PodcastService(provider);
             service.Subscribe("bart", new Subscription { Url = "http://www.podcast.com/feed.xml" });
-            var podcasts = service.Podcasts("bart");
+            var podcasts = service.SubscribedPodcasts("bart");
             Assert.AreEqual(1, podcasts.Length);
             Assert.AreEqual("http://www.podcast.com/feed.xml", podcasts[0].Url.ToString());
+            Assert.AreEqual(1, service.Podcasts().Length);
         }
 
         [TestMethod]
@@ -33,8 +35,9 @@ namespace Podgrasp.Service.Tests
             var provider = new TestServiceProvider();
             var service = new PodcastService(provider);
             service.Subscribe("bart", new Subscription { Url = "http://www.podcast.com/feed.xml" });
-            var podcasts = service.Podcasts("milhouse");
+            var podcasts = service.SubscribedPodcasts("milhouse");
             Assert.AreEqual(0, podcasts.Length);
+            Assert.AreEqual(1, service.Podcasts().Length);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
