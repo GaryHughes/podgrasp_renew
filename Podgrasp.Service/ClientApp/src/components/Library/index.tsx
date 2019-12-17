@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
-import authService from '../api-authorization/AuthorizeService'
+import { Podcast, getPodcasts } from '../api-podgrasp';
 
-interface Props {}
+interface LibraryProps {}
 
-export class Library extends Component {
+interface LibraryState {
+    podcasts: Podcast[],
+    isLoading: boolean,
+    error: string | null 
+}
+
+export class Library extends Component<LibraryProps, LibraryState> {
   
-    constructor(props: Props) {
+    constructor(props: LibraryProps) {
     
         super(props);
         
         this.state = {
-          podcasts: null,
-          isLoading: false,
+            podcasts: [] as Podcast[],
+            isLoading: false,
+            error: null
         };
     
         this.fetchPodcasts = this.fetchPodcasts.bind(this);
@@ -23,28 +30,50 @@ export class Library extends Component {
     }
 
     async fetchPodcasts() {
-        console.log("fetching podcasts");
-        this.setState({ isLoading: true });
-        const token = await authService.getAccessToken();
-        fetch('Api/1.0/Podcasts', {
-            headers: !token ? {} : { 'Authorization': `Bearer ${token}` } 
-        })
-        .then(result => this.setPodcasts(result))
-        .catch(error => this.setState({ error }));
+        try {
+            this.setState({ isLoading: true });
+            const podcasts = await getPodcasts();
+            this.setPodcasts(podcasts);
+        }
+        catch (error) {
+            console.error(error);
+        }
     }
     
-    setPodcasts(result: any) {
+    setPodcasts(result: Podcast[]) {
+
         this.setState({
-            podcats: result,
+            podcasts: result,
             isLoading: false
         });
     }
 
+    static renderPodcastsTable(podcasts: Podcast[]) {
+        return (
+            <table>
+                <thead>
+                    <tr>
+                        <td>URL</td>
+                        <td>Last Fetch Time</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {podcasts.map(podcast =>
+                        <tr>
+                            <td>{podcast.url}</td>
+                            <td>{podcast.lastFetchTime}</td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        );
+    }
+
     render() {
         return (
-        <div>
-            Library
-        </div>
+            <div>
+                {Library.renderPodcastsTable(this.state.podcasts)}
+            </div>
         );
     }
 

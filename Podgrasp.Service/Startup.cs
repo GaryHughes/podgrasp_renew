@@ -23,7 +23,7 @@ namespace Podgrasp.Service
 
         public void ConfigureServices(IServiceCollection services)
         {
-             services.AddDbContext<PodgraspContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Postgres")));
+            services.AddDbContext<PodgraspContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Postgres")));
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<PodgraspContext>();
@@ -48,6 +48,8 @@ namespace Podgrasp.Service
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.DefaultApiVersion = new ApiVersion(1, 0);
             });
+
+            services.AddSingleton<PodcastService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -77,6 +79,7 @@ namespace Podgrasp.Service
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+
                 endpoints.MapRazorPages();
             });
 

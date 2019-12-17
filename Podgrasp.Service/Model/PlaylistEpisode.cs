@@ -7,6 +7,7 @@ namespace Podgrasp.Service.Model
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public string UserId { get; set; }
         public Episode Episode { get; set; }
     }
 }

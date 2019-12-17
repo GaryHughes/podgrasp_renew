@@ -8,7 +8,9 @@ namespace Podgrasp.Service.Model
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public string UserId { get; set; }
         public Uri Url { get; set; }
+        public DateTime? LastFetchTime { get; set; }
         public string Title { get; set; }
         public string Subtitle { get; set; }
         public Uri ImageUrl { get; set; }
