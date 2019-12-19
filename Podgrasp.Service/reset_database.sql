@@ -1,5 +1,7 @@
 -- Script for resetting the database during initial development
-drop table "Playlist";
+drop table "PlaylistEpisode";
+drop table "UserEpisodes";
+drop table "UserPodcasts";
 drop table "Episodes";
 drop table "Podcasts";
 drop table "__EFMigrationsHistory";

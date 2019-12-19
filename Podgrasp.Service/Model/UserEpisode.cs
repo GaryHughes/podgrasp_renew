@@ -1,12 +1,12 @@
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Podgrasp.Service.Model
 {
-    public class PlaylistEpisode
+    public class UserEpisode
     {
         public string UserId { get; set; }
         public int EpisodeId { get; set; }
         public Episode Episode { get; set; }
+        public TimeSpan Position { get; set; }
     }
 }

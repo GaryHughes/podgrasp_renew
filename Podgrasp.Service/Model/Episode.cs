@@ -7,7 +7,6 @@ namespace Podgrasp.Service.Model
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string UserId { get; set; }
         
         // These properties come from the feed
         public string Guid { get; set; }
@@ -19,6 +18,5 @@ namespace Podgrasp.Service.Model
 
         // These properties are derived
         public TimeSpan Duration { get; set; }
-        public TimeSpan Position { get; set; }
     }
 }

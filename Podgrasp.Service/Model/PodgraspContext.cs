@@ -1,5 +1,3 @@
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.Extensions.Options;
@@ -23,16 +21,23 @@ namespace Podgrasp.Service.Model
 
         public DbSet<UserPodcast> UserPodcasts { get; set; }
 
+        public DbSet<UserEpisode> UserEpisodes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
             modelBuilder.Entity<Podcast>()
                 .HasIndex(p => p.Url);
 
+            modelBuilder.Entity<PlaylistEpisode>()
+                .HasKey(pe => new { pe.UserId, pe.EpisodeId });
+
             modelBuilder.Entity<UserPodcast>()
                 .HasKey(up => new { up.UserId, up.PodcastId });
+
+            modelBuilder.Entity<UserEpisode>()
+                .HasKey(ue => new { ue.UserId, ue.EpisodeId });
         }
     }
 }
